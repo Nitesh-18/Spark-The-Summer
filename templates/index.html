@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Web App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/all.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kalnia+Glaze:wght@100..700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="main-flex-container">
+        <!-- Left Sidebar -->
+        <div class="left-flex-container flex-item">
+            <div class="nav-links">
+                <ul>
+                    <li class="nav-items logo">
+                        <a href="#" class="logo-link">DevChat</a>
+                    </li>
+                    <li class="nav-items current-page">
+                        <a href="#" class="nav-link">
+                            <img src="{{ url_for('static', filename='icons/home-smile-angle-svgrepo-com.svg') }}" class="nav-icon" alt="Home">
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-items">
+                        <a href="#" class="nav-link">
+                            <img src="{{ url_for('static', filename='icons/explore-svgrepo-com (1).svg') }}" class="nav-icon" alt="Explore">
+                            <span>Explore</span>
+                        </a>
+                    </li>
+                    <li class="nav-items">
+                        <a href="#" class="nav-link">
+                            <img src="{{ url_for('static', filename='icons/notifications-svgrepo-com.svg') }}" class="nav-icon" alt="Notifications">
+                            <span>Notifications</span>
+                        </a>
+                    </li>
+                    <li class="nav-items">
+                        <a href="#" class="nav-link">
+                            <img src="{{ url_for('static', filename='icons/messages-svgrepo-com.svg') }}" class="nav-icon" alt="Messages">
+                            <span>Messages</span>
+                        </a>
+                    </li>
+                    <li class="nav-items">
+                        <a href="#" class="nav-link">
+                            <img src="{{ url_for('static', filename='icons/profile-1336-svgrepo-com.svg') }}" class="nav-icon" alt="Profile">
+                            <span>Profile</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Display Current User -->
+            <div class="profile-box">
+                <img src="{{ url_for('static', filename='icons/profile-1336-svgrepo-com.svg' )}}" alt="profile" class="profile-img">
+                <div class="profile-link">
+                    <p class="user-name">{{ current_user['username'] }}</p>
+                </div>
+                <div class="options-icon">
+                    <img src="{{ url_for('static', filename='icons/more-horizontal-square-svgrepo-com.svg') }}" class="nav-icon" alt="Options">
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="center-flex-container flex-item">
+            <div class="home">
+                <h1>Home</h1>
+                <i class="fas fa-magic"></i>
+            </div>
+            
+            <!-- Post Tweet Form -->
+            <div class="post-tweet">
+                <form id="tweetForm" method="POST" action="{{ url_for('tweet') }}" enctype="multipart/form-data">
+                    <div class="form-group-1">
+                        <img src="{{ url_for('static', filename=current_user['profile_image']) }}" alt="profile-pic" class="form-profile-img">
+                        <input type="text" name="tweetText" id="tweetText" placeholder="What's happening?" required class="tweet-input">
+                    </div>
+                    <div class="form-group-2">
+                        <div class="post-icons">
+                            <label for="imageUpload">
+                                <img src="{{ url_for('static', filename='icons/image-picture-svgrepo-com.svg') }}" class="post-icon" alt="Image">
+                            </label>
+                            <input type="file" id="imageUpload" name="imageUpload" accept="image/*" class="file-input">
+                            <label for="videoUpload">
+                                <img src="{{ url_for('static', filename='icons/video-library-svgrepo-com.svg') }}" class="post-icon" alt="Video">
+                            </label>
+                            <input type="file" id="videoUpload" name="videoUpload" accept="video/*" class="file-input">
+                        </div>
+                        <button class="btn" type="submit">Create Post</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- User Content -->
+            {% for tweet in tweets %}
+            <div class="tweets">
+                <div class="user-pics">
+                    <img src="{{ url_for('static', filename='img/profile.jpg') }}" alt="profile" class="tweet-profile-img">
+                </div>
+                <div class="user-content-box">
+                    <div class="user-names">
+                        <p class="user-name">{{ tweet.username }}</p>
+                        <p class="time">. {{ tweet.timestamp.strftime('%b %d, %Y %H:%M') }}</p>
+                    </div>
+                    <div class="user-content">
+                        <p>{{ tweet.content }}</p>
+                        {% if tweet.image %}
+                        <img src="{{ url_for('static', filename='uploads/' ~ tweet.image) }}" alt="Tweet Image" class="tweet-image">
+                        {% endif %}
+                        {% if tweet.video %}
+                        <video class="tweet-video" src="{{ url_for('static', filename='uploads/' ~ tweet.video) }}" autoplay controls></video>
+                        {% endif %}
+                    </div>
+                    <div class="content-icons">
+                        <div><img src="{{ url_for('static', filename='icons/comment-2-svgrepo-com.svg') }}" class="post-icon" alt="Comment">0</div>
+                        <div><img src="{{ url_for('static', filename='icons/like-1386-svgrepo-com.svg') }}" class="post-icon" alt="Like">0</div>
+                        <div><img src="{{ url_for('static', filename='icons/analytics-svgrepo-com.svg') }}" class="post-icon" alt="Analytics"></div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="right-flex-container flex-item">
+            <div class="search-box">
+                <input type="text" placeholder="Search DevChat" class="search-input">
+                <div class="search-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+            <!-- Removed trends section -->
+        </div>
+    </div>
+</body>
+
+</html>

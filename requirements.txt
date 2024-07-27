@@ -1,0 +1,9 @@
+opencv-python
+flask
+tensorflow
+torch
+flask_login
+flask_sqlalchemy
+facenet_pytorch
+pillow
+

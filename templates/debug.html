@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug</title>
+</head>
+<body>
+    <h1>Debug Page</h1>
+    <ul>
+        {% for tweet in tweets %}
+            <li>
+                <p>{{ tweet.username }}: {{ tweet.content }}</p>
+                {% if tweet.image %}
+                    <img src="{{ url_for('static', filename='uploads/' ~ tweet.image) }}" alt="Image">
+                {% endif %}
+                {% if tweet.video %}
+                    <video controls>
+                        <source src="{{ url_for('static', filename='uploads/' ~ tweet.video) }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
